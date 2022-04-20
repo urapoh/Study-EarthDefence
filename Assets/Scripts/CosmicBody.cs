@@ -6,10 +6,11 @@ public class CosmicBody : MonoBehaviour
 {
 
     [SerializeField] protected float speed;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
@@ -32,7 +33,7 @@ public class CosmicBody : MonoBehaviour
 
     protected virtual void HitShield()
     {
-
+        GameManager.Instance.Score++;
     }
 
     protected virtual void HitEarth()

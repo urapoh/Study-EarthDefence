@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Shield : MonoBehaviour
 {
+    
+    public GameManager gameManager;
     // Start is called before the first frame update
     void Start()
     {
@@ -17,6 +19,5 @@ public class Shield : MonoBehaviour
 
         transform.Rotate(Vector3.back * input);
     }
-
 
 }
