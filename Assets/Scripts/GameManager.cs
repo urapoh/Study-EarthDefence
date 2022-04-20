@@ -9,8 +9,12 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject cometPrefab;
     [SerializeField] float distance;
     [SerializeField] TextMeshProUGUI scoreText;
+    [SerializeField] TextMeshProUGUI aliveText;
     private int score;
+    private int peopleAlive;
+    //private float birthRate = 
 
+    private const int initialPeople = 8000;
     public int Score
     {
         get
@@ -21,6 +25,28 @@ public class GameManager : MonoBehaviour
         {
             score = value;
             scoreText.text = "Score: " + score;
+        }
+    }
+
+    public int PeopleAlive
+    {
+        get
+        {
+            return peopleAlive;
+        }
+        set
+        {
+            if (value >= 0)
+            {
+                peopleAlive = value;
+            }
+            else
+            {
+                peopleAlive = 0;
+                Debug.Log("Game Over");
+            }
+            
+            aliveText.text = "Alive:" + peopleAlive + "M";
         }
     }
 
@@ -38,13 +64,14 @@ public class GameManager : MonoBehaviour
             Instance = this;
         }
 
+        PeopleAlive = initialPeople;
         InvokeRepeating("SpawnBoby", 1, 2);
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        //PeopleAlive +=
     }
 
     private void SpawnBoby()

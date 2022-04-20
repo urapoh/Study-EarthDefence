@@ -4,11 +4,13 @@ using UnityEngine;
 
 public class Comet : CosmicBody
 {
+    [SerializeField] protected float deathOnImpact;
     protected override void HitEarth()
     {
         base.HitEarth();
         Destroy(gameObject);
-        Debug.Log("Game over");
+        
+        GameManager.Instance.PeopleAlive = Mathf.CeilToInt(GameManager.Instance.PeopleAlive / deathOnImpact);
     }
 
     protected override void HitShield()

@@ -4,12 +4,13 @@ using UnityEngine;
 
 public class Asteroid : CosmicBody
 {
-
+    [SerializeField] protected int deathOnImpact;
     protected override void HitEarth()
     {
         base.HitEarth();
         Destroy(gameObject);
-        Debug.Log("Game over");
+        //Debug.Log("Game over");
+        GameManager.Instance.PeopleAlive -= deathOnImpact;
     }
 
     protected override void HitShield()
