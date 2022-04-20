@@ -5,6 +5,8 @@ using TMPro;
 
 public class GameManager : MonoBehaviour
 {
+    private const int initialPeople = 8000;
+
     [SerializeField] GameObject asteroidPrefab;
     [SerializeField] GameObject cometPrefab;
     [SerializeField] float distance;
@@ -12,9 +14,16 @@ public class GameManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI aliveText;
     private int score;
     private int peopleAlive;
-    //private float birthRate = 
+    private int waveBodies;
+    private int waveBodiesInit = 15;
+    private float spawnDelay = 3f;
+    private float spawnDelayInitial = 3f;
+    private float timeSpawned;
+    private bool isWave;
+    private float cooldownTime = 10f;
+    private float quickeningMultiplier = 0.95f;
 
-    private const int initialPeople = 8000;
+    public static GameManager Instance { get; private set; }
     public int Score
     {
         get
@@ -50,10 +59,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public static GameManager Instance { get; private set; }
-
-    // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
         if (Instance != null && Instance != this)
         {
@@ -63,18 +69,46 @@ public class GameManager : MonoBehaviour
         {
             Instance = this;
         }
+    }
 
+    // Start is called before the first frame update
+    void Start()
+    {
         PeopleAlive = initialPeople;
-        InvokeRepeating("SpawnBoby", 1, 2);
+        isWave = true;
+        timeSpawned = 0;
+        waveBodies = waveBodiesInit;
     }
 
     // Update is called once per frame
     void Update()
     {
-        //PeopleAlive +=
+        if (isWave)
+        {
+            if (Time.time - timeSpawned > spawnDelay)
+            {
+                SpawnBody();
+                timeSpawned = Time.time;
+                spawnDelay *= quickeningMultiplier;
+                waveBodies--;
+                if (waveBodies <= 0)
+                {
+                    isWave = false;
+                    StartCoroutine(WaveCooldown());
+                }
+            }
+        }
     }
 
-    private void SpawnBoby()
+    IEnumerator WaveCooldown()
+    {
+        yield return new WaitForSeconds(cooldownTime);
+        waveBodies = waveBodiesInit;
+        spawnDelay = spawnDelayInitial;
+        isWave = true;
+    }
+
+    private void SpawnBody()
     {
         GameObject prefab;
         if (Random.Range(0f, 1f) < 0.8)
