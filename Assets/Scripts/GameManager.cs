@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] GameObject asteroidPrefab;
     [SerializeField] GameObject cometPrefab;
+    [SerializeField] GameObject earth;
     [SerializeField] float distance;
     [SerializeField] TextMeshProUGUI scoreText;
     [SerializeField] TextMeshProUGUI aliveText;
@@ -24,19 +25,15 @@ public class GameManager : MonoBehaviour
     private float quickeningMultiplier = 0.95f;
 
     public static GameManager Instance { get; private set; }
-    public int Score
+
+    // ENCAPSULATION
+    public void AddScore(int value)
     {
-        get
-        {
-            return score;
-        }
-        set
-        {
-            score = value;
+            score += value;
             scoreText.text = "Score: " + score;
-        }
     }
 
+    // ENCAPSULATION
     public int PeopleAlive
     {
         get
@@ -54,9 +51,20 @@ public class GameManager : MonoBehaviour
                 peopleAlive = 0;
                 Debug.Log("Game Over");
             }
-            
-            aliveText.text = "Alive:" + peopleAlive + "M";
+
+            // ABSTRACTION
+            ChangePeopleCounter();
         }
+    }
+
+    private void ChangePeopleCounter()
+    {
+        float gb = (float)peopleAlive / initialPeople;
+
+        earth.GetComponent<Renderer>().material.SetColor("_TextureColor", new Color(1, gb, gb));
+        earth.GetComponent<Renderer>().material.SetColor("_CloudColor", new Color(1, gb, gb));
+
+        aliveText.text = "Alive:" + peopleAlive + "M";
     }
 
     private void Awake()
@@ -94,6 +102,8 @@ public class GameManager : MonoBehaviour
                 if (waveBodies <= 0)
                 {
                     isWave = false;
+
+                    // ABSTRACTION
                     StartCoroutine(WaveCooldown());
                 }
             }

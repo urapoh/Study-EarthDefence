@@ -2,28 +2,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// INHERITANCE
 public class Comet : CosmicBody
 {
     [SerializeField] protected float deathOnImpact;
+
+    // POLYMORPHISM
     protected override void HitEarth()
     {
         base.HitEarth();
-        Destroy(gameObject);
         
         GameManager.Instance.PeopleAlive = Mathf.CeilToInt(GameManager.Instance.PeopleAlive / deathOnImpact);
     }
 
+    // POLYMORPHISM
     protected override void HitShield()
     {
         base.HitShield();
         speed = -speed;
     }
 
-    protected override void Move()
-    {
-        transform.position -= transform.position.normalized * speed * Time.deltaTime;
-    }
-
+    // POLYMORPHISM
     protected override void Update()
     {
         base.Update();
